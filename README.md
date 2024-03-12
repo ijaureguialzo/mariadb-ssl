@@ -1,19 +1,16 @@
 # mariadb-ssl
 
-```
- _________________________________________ 
-/ 'Twas midnight, and the UNIX hacks Did  \
-| gyre and gimble in their cave All mimsy |
-| was the CS-VAX And Cory raths outgrabe. |
-|                                         |
-| "Beware the software rot, my son! The   |
-| faults that bite, the jobs that thrash! |
-| Beware the broken pipe, and shun The    |
-\ frumious system crash!"                 /
- ----------------------------------------- 
-        \   ^__^
-         \  (oo)\_______
-            (__)\       )\/\
-                ||----w |
-                ||     ||
-```
+Ejemplos de configuración de MariaDB con certificados SSL.
+
+## Variantes
+
+Se puede usar SSL en el cliente y/o en el servidor, con CA o certificados autofirmados.
+
+| SSL cliente | SSL servidor | Certificados | Ejemplo                                      |
+|-------------|--------------|--------------|----------------------------------------------|
+| No          | Sí           | Autofirmados | [one-way-autofirmado](./one-way-autofirmado) |
+
+## Referencias
+
+- [¿Cómo configurar SSL para MariaDB?](https://dinogeek.me/ES/MariaDB/Como-configurar-SSL-para-MariaDB.html)
+- [Using TLS/SSL with MariaDB Connector/J](https://mariadb.com/kb/en/using-tls-ssl-with-mariadb-java-connector/)
