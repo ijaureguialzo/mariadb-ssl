@@ -1,0 +1,29 @@
+services:
+  mariadb:
+    image: mariadb:${MARIADB_VERSION}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MARIADB_AUTO_UPGRADE=true
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    expose:
+      - 3306
+
+  phpmyadmin:
+    image: phpmyadmin:${PHPMYADMIN_VERSION}
+    environment:
+      - PMA_USER=root
+      - PMA_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - PMA_HOST=mariadb
+      - PMA_PORT=3306
+      - UPLOAD_LIMIT=1g
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
+
+volumes:
+  mariadb_data:
