@@ -32,6 +32,15 @@ services:
     volumes:
       - certs_data:/app
 
+  maven:
+    image: maven:latest
+    working_dir: /usr/srv/AppJava
+    volumes:
+      - maven_data:/root/.m2
+      - ./AppJava:/usr/srv/AppJava
+      - certs_data:/certs:ro
+
 volumes:
   mariadb_data:
   certs_data:
+  maven_data:

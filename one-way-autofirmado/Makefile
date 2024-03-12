@@ -12,7 +12,9 @@ help: _header
 	@echo Opciones:
 	@echo ---------------------------------
 	@echo start / stop / restart / stop-all
-	@echo certs / check-ssl
+	@echo certs / check-ssl / force-ssl
+	@echo run-test-app
+	@echo ---------------------------------
 	@echo workspace
 	@echo logs / stats
 	@echo update
@@ -46,14 +48,20 @@ stop-all:
 
 certs:
 	@echo "Generando certificados..."
-	@docker compose run --rm cert-manager /bin/sh -c 'openssl req -newkey rsa:2048 -subj "/C=ES/ST=Araba/L=Vitoria-Gasteiz/O=Test/CN=mariadb.test" -nodes -keyout server-key.pem -x509 -days 365 -out server-cert.pem > /dev/null 2>&1'
-	@docker compose run --rm cert-manager /bin/sh -c 'openssl req -newkey rsa:2048 -subj "/C=ES/ST=Araba/L=Vitoria-Gasteiz/O=Test/CN=ca.test" -nodes -keyout ca-key.pem -x509 -days 365 -out ca-cert.pem > /dev/null 2>&1'
+	@docker compose run --rm cert-manager /bin/sh -c 'openssl req -newkey rsa:2048 -subj "/C=ES/ST=Araba/L=Vitoria-Gasteiz/O=Test/CN=mariadb" -nodes -keyout server-key.pem -x509 -days 365 -out server-cert.pem > /dev/null 2>&1'
+	@docker compose run --rm cert-manager /bin/sh -c 'openssl req -newkey rsa:2048 -subj "/C=ES/ST=Araba/L=Vitoria-Gasteiz/O=Test/CN=ca" -nodes -keyout ca-key.pem -x509 -days 365 -out ca-cert.pem > /dev/null 2>&1'
 	@docker compose run --rm mariadb /bin/sh -c 'chown mysql:mysql /etc/mysql/certs/*'
 	@docker compose run --rm mariadb /bin/sh -c 'chmod 600 /etc/mysql/certs/*'
 	@docker compose run --rm mariadb /bin/sh -c 'ls -l /etc/mysql/certs/*'
 
 check-ssl:
 	@docker compose exec -e MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mariadb mysql -u root -e 'SHOW VARIABLES LIKE "%ssl%";'
+
+force-ssl:
+	@docker compose exec -e MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mariadb mysql -u root -e 'ALTER USER "root"@"%" REQUIRE SSL;'
+
+run-test-app:
+	@docker compose run --rm maven mvn compile exec:java -Dexec.mainClass="org.example.Main"
 
 workspace:
 	@docker compose exec mariadb /bin/bash
