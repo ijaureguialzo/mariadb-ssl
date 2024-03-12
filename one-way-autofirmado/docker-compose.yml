@@ -9,6 +9,8 @@ services:
       - MARIADB_AUTO_UPGRADE=true
     volumes:
       - mariadb_data:/var/lib/mysql
+      - certs_data:/etc/mysql/certs
+      - ./mariadb.cnf:/etc/mysql/conf.d/ssl.cnf:ro
     expose:
       - 3306
 
@@ -25,5 +27,11 @@ services:
     depends_on:
       - mariadb
 
+  cert-manager:
+    image: finalgene/openssh:latest
+    volumes:
+      - certs_data:/app
+
 volumes:
   mariadb_data:
+  certs_data:
