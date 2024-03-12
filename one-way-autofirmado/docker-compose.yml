@@ -28,12 +28,12 @@ services:
       - mariadb
 
   cert-manager:
-    image: finalgene/openssh:latest
+    image: finalgene/openssh:${OPENSSH_VERSION}
     volumes:
       - certs_data:/app
 
   maven:
-    image: maven:latest
+    image: maven:${MAVEN_VERSION}
     working_dir: /usr/srv/AppJava
     volumes:
       - maven_data:/root/.m2
